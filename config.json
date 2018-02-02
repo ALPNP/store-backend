@@ -1,0 +1,9 @@
+{
+    "serverPort": 3000,
+    "endpointName": "Store API",
+    "mongodb": {
+        "user": "",
+        "secret": "",
+        "dataBase": "mongodb://localhost/simple-api"
+    }
+}
