@@ -1,6 +1,8 @@
 {
     "serverPort": 3000,
     "endpointName": "Store API",
+    "secret": "Nhbkbdbkb@",
+    "jwtExpire": 24,
     "mongodb": {
         "user": "",
         "secret": "",
