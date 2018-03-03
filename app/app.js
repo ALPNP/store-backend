@@ -1,7 +1,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var baseRoute = require('./routes/baseRoute');
-
+var userCreatorRoute = require('./routes/userCreatorRoute');
+var authRoute = require('./routes/authRoute');
 var app = express();
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -15,5 +16,7 @@ app.use(function (req, res, next) {
 });
 
 app.use('/', baseRoute);
+app.use('/', userCreatorRoute);
+app.use('/', authRoute);
 
 module.exports = app;
