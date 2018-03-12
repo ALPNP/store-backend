@@ -23,7 +23,8 @@ authRouter.post('/auth', function (req, res) {
             } else {
                 var token = jwt.sign({
                     userName: user.userName,
-                    password: user.password
+                    id: user._id,
+                    permission: user.permission
                 }, configFile.secret, {
                     expiresIn: 60 * 60 * configFile.jwtExpire
                 });
