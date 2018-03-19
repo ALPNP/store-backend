@@ -3,31 +3,33 @@ var authRouter = express.Router();
 var jwt = require('jsonwebtoken');
 var ServerResponse = require('./../classes/ServerResponse');
 var User = require('./../models/user');
-var config = require('./../../config.json');
+var configFile = require('./../../config.json');
 
 authRouter.post('/auth', function (req, res) {
+    var sr = new ServerResponse();
+
     User.findOne({
         userName: req.body.userName
     }, function (err, user) {
         if (err) {
-            var userFindError = new ServerResponse({success: false, message: 'Server error', code: 1});
-            res.json(userFindError.error());
+            res.json(sr.setRes(false, 'Server error', 1).send());
         }
 
         if (!user) {
-            var userNotFoundError = new ServerResponse({success: false, message: 'Authentication failed.', code: 2});
-            res.json(userNotFoundError.error());
+            res.json(sr.setRes(false, 'Authentication failed', 2).send());
         } else if (user) {
             if (user.password != req.body.password) {
-                var authFailedError = new ServerResponse({success: false, message: 'Authentication failed.', code: 3});
-                res.json(authFailedError.error());
+                res.json(sr.setRes(false, 'Authentication failed', 3).send());
             } else {
-                var token = jwt.sign(user, config.secret, {
-                    expiresIn: 60 * 60 * config.jwtExpire
+                var token = jwt.sign({
+                    userName: user.userName,
+                    id: user._id,
+                    permission: user.permission
+                }, configFile.secret, {
+                    expiresIn: 60 * 60 * configFile.jwtExpire
                 });
 
-                var successAuthResponse = new ServerResponse({success: true, message: 'ok', code: 4, token: token});
-                res.json(successAuthResponse.success());
+                res.json(sr.setRes(true, 'ok', 4, {token: "Bearer " + token}).send());
             }
         }
     })
