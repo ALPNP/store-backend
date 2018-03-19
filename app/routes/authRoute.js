@@ -29,7 +29,7 @@ authRouter.post('/auth', function (req, res) {
                     expiresIn: 60 * 60 * configFile.jwtExpire
                 });
 
-                res.json(sr.setRes(true, 'ok', 4, {token: token}).send());
+                res.json(sr.setRes(true, 'ok', 4, {token: "Bearer " + token}).send());
             }
         }
     })
