@@ -3,6 +3,8 @@ var bodyParser = require('body-parser');
 var baseRoute = require('./routes/baseRoute');
 var userCreatorRoute = require('./routes/userCreatorRoute');
 var authRoute = require('./routes/authRoute');
+var guardService = require('./guards/authGuard');
+var categoriesRouter = require('./routes/secured/categoriesRoute');
 var app = express();
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -18,5 +20,8 @@ app.use(function (req, res, next) {
 app.use('/', baseRoute);
 app.use('/', userCreatorRoute);
 app.use('/', authRoute);
+
+app.use('/admApi', guardService);
+app.use('/admApi', categoriesRouter);
 
 module.exports = app;
