@@ -31,7 +31,7 @@ var categoriesController = {
                 return res.json(ctx.sr.setRes(false, 'Categories error', 4, err).send());
             }
 
-            res.json(ctx.sr.setRes(true, 'Find ' + categories.length, 5, categories));
+            res.json(ctx.sr.setRes(true, 'Found ' + categories.length + ' items', 5, categories).send());
         });
     }
 };
