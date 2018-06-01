@@ -1,10 +1,10 @@
 var express = require('express');
-var userCreator = express.Router();
+var userEditor = express.Router();
 var User = require('./../models/user');
 var ServerResponse = require('./../classes/ServerResponse');
 var utilities = require('./../utilities');
 
-userCreator.post('/userCreate', function (req, res) {
+userEditor.post('/userCreate', function (req, res) {
     var sr = new ServerResponse();
     var userName = req.body.userName;
     var password = req.body.password;
@@ -34,7 +34,7 @@ userCreator.post('/userCreate', function (req, res) {
                     res.json(sr.setRes(true, 'User saved', 3).send());
                 });
             } else {
-                res.json(sr.setRes(false, 'User not saved', 4).send());
+                res.json(sr.setRes(false, 'Username already exits', 4).send());
             }
         });
     } else {
@@ -42,4 +42,31 @@ userCreator.post('/userCreate', function (req, res) {
     }
 });
 
-module.exports = userCreator;
+userEditor.put('/userDelete', function (req, res) {
+    var sr = new ServerResponse();
+    var userName = req.body.userName;
+
+    User.findOne({
+        userName: userName
+    }, function (err, user) {
+        if (err) {
+            res.json(sr.setRes(false, err, 1).send());
+        }
+
+        if (user) {
+            User.deleteOne({
+                userName: userName
+            }, function (err) {
+                if (err) {
+                    res.json(sr.setRes(false, err, 2).send());
+                } else {
+                    res.json(sr.setRes(false, 'Username deleted', 3).send());
+                }
+            });
+        } else {
+            res.json(sr.setRes(false, 'Username deleted', 4).send());
+        }
+    });
+});
+
+module.exports = userEditor;
